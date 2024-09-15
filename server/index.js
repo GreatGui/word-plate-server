@@ -3,10 +3,11 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { generateRandomLetters } from "./word-generate.js";
 
+const PORT = process.env.PORT ?? 3000
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://word-plate.netlify.app"
+    origin: "*"
   }
 });
 
@@ -16,8 +17,6 @@ const apiWord = axios.create({
 
 const words = []
 const challengeOfDay = []
-
-
 
 io.on("connection", (socket) => {
   console.log('new connection', socket.id)
@@ -58,8 +57,8 @@ io.on("connection", (socket) => {
   })
 });
 
-httpServer.listen(3000, () => {
+httpServer.listen(PORT, () => {
   challengeOfDay.push(...generateRandomLetters())
 
-  console.log('start', process.env.SOCKET_PORT)
+  console.log('start', PORT)
 });
